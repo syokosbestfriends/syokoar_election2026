@@ -557,7 +557,7 @@ if (this.blinkState) {
 
     },
 
-    // ==================================================
+// ==================================================
 // 3人のまばたき
 // ==================================================
 
@@ -567,68 +567,41 @@ updateBlink: function (elapsed) {
 
   Object.values(this.blinkState).forEach((blink) => {
 
-    // ----------------------------------------------
-    // まばたき開始
-    // ----------------------------------------------
-
     if (
       !blink.blinking &&
       elapsed >= blink.nextBlink
     ) {
-
       blink.blinking = true;
       blink.blinkStart = elapsed;
     }
 
     if (!blink.blinking) return;
 
-    const blinkElapsed =
+    const t =
       elapsed - blink.blinkStart;
 
-    // ----------------------------------------------
-    // 開 → 半目
-    // ----------------------------------------------
-
-    if (blinkElapsed < 0.07) {
+    if (t < 0.07) {
 
       blink.character.setAttribute(
         "src",
         blink.half
       );
 
-    }
-
-    // ----------------------------------------------
-    // 半目 → 閉じる
-    // ----------------------------------------------
-
-    else if (blinkElapsed < 0.14) {
+    } else if (t < 0.14) {
 
       blink.character.setAttribute(
         "src",
         blink.close
       );
 
-    }
-
-    // ----------------------------------------------
-    // 閉じる → 半目
-    // ----------------------------------------------
-
-    else if (blinkElapsed < 0.21) {
+    } else if (t < 0.21) {
 
       blink.character.setAttribute(
         "src",
         blink.half
       );
 
-    }
-
-    // ----------------------------------------------
-    // 半目 → 開く
-    // ----------------------------------------------
-
-    else {
+    } else {
 
       blink.character.setAttribute(
         "src",
@@ -637,13 +610,14 @@ updateBlink: function (elapsed) {
 
       blink.blinking = false;
 
-      // 次の瞬きを3～6秒後にランダム設定
       blink.nextBlink =
         elapsed +
         3 +
         Math.random() * 3;
     }
+
   });
+
 },
 
     // ==================================================
@@ -1105,37 +1079,62 @@ if (elapsed >= 2.4) {
   >
     <!-- 読み込む画像 -->
     <a-assets timeout="15000">
+
+  <!-- Cu -->
   <img
     id="cu-open"
     src="../assets/characters/cu_open.png"
     crossorigin="anonymous"
   >
-
   <img
     id="cu-half"
     src="../assets/characters/cu_half.png"
     crossorigin="anonymous"
   >
-
   <img
     id="cu-close"
     src="../assets/characters/cu_close.png"
     crossorigin="anonymous"
   >
-  <img
-  id="co-open"
-  src="../assets/characters/co_open.png"
-  crossorigin="anonymous"
 
+  <!-- Co -->
+  <img
+    id="co-open"
+    src="./assets/characters/co_open.png"
+    crossorigin="anonymous"
   >
   <img
-  id="pa-open"
-  src="../assets/characters/pa_open.png"
-  crossorigin="anonymous"
->
+    id="co-half"
+    src="../assets/characters/co_half.png"
+    crossorigin="anonymous"
+  >
+  <img
+    id="co-close"
+    src="../assets/characters/co_close.png"
+    crossorigin="anonymous"
+  >
 
+  <!-- Pa -->
+  <img
+    id="pa-open"
+    src="../assets/characters/pa_open.png"
+    crossorigin="anonymous"
+  >
+  <img
+    id="pa-half"
+    src="../assets/characters/pa_half.png"
+    crossorigin="anonymous"
+  >
+  <img
+    id="pa-close"
+    src="../assets/characters/pa_close.png"
+    crossorigin="anonymous"
+  >
 
 </a-assets>
+
+
+
 
     <!-- AR用カメラ -->
     <a-camera
@@ -1224,7 +1223,25 @@ if (elapsed >= 2.4) {
     shader:flat;
     depthWrite:false;
   "
-  ></a-image>
+  >
+  <!-- Coの影 -->
+ <a-image
+   src="#co-open"
+   width="0.88"
+   height="1.32"
+   position="0.035 -0.035 -0.006"
+   scale="1.015 1.015 1"
+   material="
+     transparent: true;
+     opacity: 0.20;
+     alphaTest: 0.01;
+     shader: flat;
+     color: #1b1024;
+     depthWrite: false;
+   "
+   ></a-image>
+
+</a-image>
 
 
  <a-image
@@ -1246,7 +1263,25 @@ if (elapsed >= 2.4) {
     shader:flat;
     depthWrite:false;
   "
- ></a-image> 
+ >
+<!-- Paの影 -->
+<a-image
+  src="#pa-open"
+  width="0.88"
+  height="1.32"
+  position="0.035 -0.035 -0.006"
+  scale="1.015 1.015 1"
+  material="
+    transparent: true;
+    opacity: 0.20;
+    alphaTest: 0.01;
+    shader: flat;
+    color: #1b1024;
+    depthWrite: false;
+  "
+></a-image>
+
+</a-image> 
 
 
 </a-entity>
