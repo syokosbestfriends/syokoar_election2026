@@ -528,9 +528,23 @@ this.characterGlow.setAttribute(
 
 
       // まばたきを初期状態へ戻す
-this.character.setAttribute("src", "#cu-open");
-this.co.setAttribute("src", "#co-open");
-this.pa.setAttribute("src", "#pa-open");
+this.character.setAttribute(
+  "material",
+  "src",
+  "#cu-open"
+);
+
+this.co.setAttribute(
+  "material",
+  "src",
+  "#co-open"
+);
+
+this.pa.setAttribute(
+  "material",
+  "src",
+  "#pa-open"
+);
 
 // まばたき状態をリセット
 if (this.blinkState) {
@@ -567,12 +581,18 @@ updateBlink: function (elapsed) {
 
   Object.values(this.blinkState).forEach((blink) => {
 
+    // まばたき開始
     if (
       !blink.blinking &&
       elapsed >= blink.nextBlink
     ) {
       blink.blinking = true;
       blink.blinkStart = elapsed;
+
+      console.log(
+        "まばたき開始:",
+        blink.open
+      );
     }
 
     if (!blink.blinking) return;
@@ -580,36 +600,51 @@ updateBlink: function (elapsed) {
     const t =
       elapsed - blink.blinkStart;
 
+    // 開 → 半目
     if (t < 0.07) {
 
       blink.character.setAttribute(
+        "material",
         "src",
         blink.half
       );
 
-    } else if (t < 0.14) {
+    }
+
+    // 半目 → 閉じる
+    else if (t < 0.14) {
 
       blink.character.setAttribute(
+        "material",
         "src",
         blink.close
       );
 
-    } else if (t < 0.21) {
+    }
+
+    // 閉じる → 半目
+    else if (t < 0.21) {
 
       blink.character.setAttribute(
+        "material",
         "src",
         blink.half
       );
 
-    } else {
+    }
+
+    // 半目 → 開く
+    else {
 
       blink.character.setAttribute(
+        "material",
         "src",
         blink.open
       );
 
       blink.blinking = false;
 
+      // 次回は3～6秒後
       blink.nextBlink =
         elapsed +
         3 +
