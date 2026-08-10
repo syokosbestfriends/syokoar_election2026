@@ -577,7 +577,22 @@ if (this.blinkState) {
 
 updateBlink: function (elapsed) {
 
-  if (!this.blinkState) return;
+  if (!this.blinkState) {
+    console.log("blinkStateなし");
+    return;
+  }
+
+  if (!this.blinkDebugDone) {
+    console.log(
+      "updateBlink動作中",
+      "elapsed =", elapsed,
+      "Cu次回 =", this.blinkState.cu.nextBlink,
+      "Co次回 =", this.blinkState.co.nextBlink,
+      "Pa次回 =", this.blinkState.pa.nextBlink
+    );
+
+    this.blinkDebugDone = true;
+  }
 
   Object.values(this.blinkState).forEach((blink) => {
 
