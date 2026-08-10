@@ -151,15 +151,57 @@ video {
   width: min(82vw, 520px);
 }
 
-/* 星輝子 */
-#ui-name {
+/* ==================================================
+   星輝子プロフィールリンク
+================================================== */
+
+#name-link {
+  position: absolute;
+
+  left: 50%;
+
   bottom: max(
     115px,
     calc(env(safe-area-inset-bottom) + 100px)
   );
 
+  transform: translateX(-50%);
+
   width: min(52vw, 310px);
+
+  pointer-events: auto;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease;
+
+  text-decoration: none;
 }
+
+
+/* 名前画像表示 */
+#name-link.show {
+  opacity: 1;
+}
+
+
+/* name.png本体 */
+#name-link img {
+  position: static;
+
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  opacity: 1;
+
+  transform: none;
+}
+
+
 
 /* ==================================================
    投票ボタン
@@ -302,7 +344,7 @@ this.uiBanner =
   document.querySelector("#ui-banner");
 
 this.uiName =
-  document.querySelector("#ui-name");
+  document.querySelector("#name-link");
 
 this.uiVote =
   document.querySelector("#vote-link");
@@ -1340,11 +1382,18 @@ if (elapsed >= 2.05) {
     alt="シンデレラガール総選挙開催中"
   >
 
+  <a
+  id="name-link"
+  href="https://cinderellagirls.idolmaster-official.jp/idol/syoko/"
+  target="_blank"
+  rel="noopener noreferrer"
+>
   <img
     id="ui-name"
     src="../assets/ui/name.png"
     alt="星輝子"
   >
+</a>
 
   <a
   id="vote-link"
