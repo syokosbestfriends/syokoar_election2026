@@ -1012,9 +1012,10 @@ if (elapsed >= 2.4) {
       1
     );
 
-  // 0→1を滑らかに変化
+  // 0 → 1を滑らかに変化
   const smoothBlend =
-    floatBlend * floatBlend *
+    floatBlend *
+    floatBlend *
     (3 - 2 * floatBlend);
 
   const cuFloat =
@@ -1041,18 +1042,24 @@ if (elapsed >= 2.4) {
   this.pa.object3D.position.y =
     paBaseY + paFloat;
 
+} // ← ふわふわif終了
+
+
+// ----------------------------------------------
+// 3人のまばたき更新
+// ----------------------------------------------
+
+this.updateBlink(elapsed);
+
+
+if (elapsed >= 2.05) {
+  this.status.textContent =
+    "星輝子、召喚！";
 }
 
-}
+} // ← tick終了
 
-      this.updateBlink(elapsed);
-
-      if (elapsed >= 2.05) {
-        this.status.textContent =
-          "星輝子、召喚！";
-      }
-    }
-  });
+ });
 
   window.addEventListener("DOMContentLoaded", () => {
     const scene =
