@@ -143,13 +143,18 @@ video {
 
 /* 総選挙バナー */
 #ui-banner {
-  top: max(
-    72px,
-    calc(env(safe-area-inset-top) + 55px)
+  top: auto;
+
+  bottom: max(
+    210px,
+    calc(env(safe-area-inset-bottom) + 195px)
   );
 
-  width: min(82vw, 520px);
+  width: min(78vw, 500px);
 }
+
+
+
 
 /* ==================================================
    星輝子プロフィールリンク
@@ -158,16 +163,18 @@ video {
 #name-link {
   position: absolute;
 
-  left: 50%;
+  left: 67%;
 
   bottom: max(
-    115px,
-    calc(env(safe-area-inset-bottom) + 100px)
+    285px,
+    calc(env(safe-area-inset-bottom) + 270px)
   );
 
-  transform: translateX(-50%);
+  transform:
+    translateX(-50%)
+    rotate(-7deg);
 
-  width: min(52vw, 310px);
+  width: min(46vw, 285px);
 
   pointer-events: auto;
 
@@ -180,10 +187,12 @@ video {
   text-decoration: none;
 }
 
-
-/* 名前画像表示 */
 #name-link.show {
   opacity: 1;
+
+  transform:
+    translateX(-50%)
+    rotate(-7deg);
 }
 
 
@@ -213,8 +222,8 @@ video {
   left: 50%;
 
   bottom: max(
-    38px,
-    calc(env(safe-area-inset-bottom) + 24px)
+    82px,
+    calc(env(safe-area-inset-bottom) + 68px)
   );
 
   transform: translateX(-50%);
@@ -1563,7 +1572,7 @@ if (elapsed >= 2.05) {
   width="0.88"
   height="1.32"
 
-  position="0.43 0.43 0.048"
+  position="0.34 0.50 0.045"
 
   scale="0.001 0.001 0.001"
 
