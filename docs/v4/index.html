@@ -583,9 +583,41 @@ if (this.blinkState) {
 updateBlink: function (elapsed) {
 
   if (!this.blinkState) {
-    console.log("blinkStateなし");
-    return;
-  }
+
+  console.log("blinkState再生成");
+
+  this.blinkState = {
+    cu: {
+      character: this.character,
+      open: "#cu-open",
+      half: "#cu-half",
+      close: "#cu-close",
+      nextBlink: elapsed + 1.0,
+      blinking: false,
+      blinkStart: 0
+    },
+
+    co: {
+      character: this.co,
+      open: "#co-open",
+      half: "#co-half",
+      close: "#co-close",
+      nextBlink: elapsed + 1.8,
+      blinking: false,
+      blinkStart: 0
+    },
+
+    pa: {
+      character: this.pa,
+      open: "#pa-open",
+      half: "#pa-half",
+      close: "#pa-close",
+      nextBlink: elapsed + 2.6,
+      blinking: false,
+      blinkStart: 0
+    }
+  };
+}
 
   if (!this.blinkDebugDone) {
     console.log(
