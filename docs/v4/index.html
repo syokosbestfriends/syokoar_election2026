@@ -161,14 +161,54 @@ video {
   width: min(52vw, 310px);
 }
 
-/* 投票はこちら */
-#ui-vote {
+/* ==================================================
+   投票ボタン
+================================================== */
+
+#vote-link {
+  position: absolute;
+
+  left: 50%;
+
   bottom: max(
     38px,
     calc(env(safe-area-inset-bottom) + 24px)
   );
 
+  transform: translateX(-50%);
+
   width: min(72vw, 430px);
+
+  pointer-events: auto;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease;
+
+  text-decoration: none;
+}
+
+
+/* 投票ボタン表示 */
+#vote-link.show {
+  opacity: 1;
+}
+
+
+/* vote.png本体 */
+#vote-link img {
+  position: static;
+
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  opacity: 1;
+
+  transform: none;
 }
 
 
@@ -265,7 +305,7 @@ this.uiName =
   document.querySelector("#ui-name");
 
 this.uiVote =
-  document.querySelector("#ui-vote");
+  document.querySelector("#vote-link");
 
 this.uiShown = {
   banner: false,
@@ -1306,11 +1346,18 @@ if (elapsed >= 2.05) {
     alt="星輝子"
   >
 
+  <a
+  id="vote-link"
+  href="https://idolmaster-official.jp/cinderellagirls/vote2026/vote"
+  target="_blank"
+  rel="noopener noreferrer"
+>
   <img
     id="ui-vote"
     src="../assets/ui/vote.png"
     alt="投票はこちら"
   >
+</a>
 
 </div>
 
