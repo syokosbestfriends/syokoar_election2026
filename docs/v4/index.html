@@ -98,6 +98,80 @@ video {
       font-size: 13px;
       text-align: center;
     }
+
+
+/* ==================================================
+   AR UI
+================================================== */
+
+#ar-ui {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+
+  pointer-events: none;
+}
+
+/* 共通 */
+#ar-ui img {
+  position: absolute;
+
+  left: 50%;
+  transform:
+    translateX(-50%)
+    translateY(12px)
+    scale(0.96);
+
+  opacity: 0;
+
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease;
+
+  height: auto;
+}
+
+/* 表示状態 */
+#ar-ui img.show {
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    translateY(0)
+    scale(1);
+}
+
+/* 総選挙バナー */
+#ui-banner {
+  top: max(
+    72px,
+    calc(env(safe-area-inset-top) + 55px)
+  );
+
+  width: min(82vw, 520px);
+}
+
+/* 星輝子 */
+#ui-name {
+  bottom: max(
+    115px,
+    calc(env(safe-area-inset-bottom) + 100px)
+  );
+
+  width: min(52vw, 310px);
+}
+
+/* 投票はこちら */
+#ui-vote {
+  bottom: max(
+    38px,
+    calc(env(safe-area-inset-bottom) + 24px)
+  );
+
+  width: min(72vw, 430px);
+}
+
+
   </style>
 
   <script>
@@ -179,6 +253,26 @@ console.log(
 
       this.guide = document.querySelector("#guide");
       this.status = document.querySelector("#status");
+
+// ==================================================
+// UI
+// ==================================================
+
+this.uiBanner =
+  document.querySelector("#ui-banner");
+
+this.uiName =
+  document.querySelector("#ui-name");
+
+this.uiVote =
+  document.querySelector("#ui-vote");
+
+this.uiShown = {
+  banner: false,
+  name: false,
+  vote: false
+};
+
 
       this.particles = [];
       this.myceliumBranches = [];
@@ -573,6 +667,15 @@ if (this.blinkState) {
   }
 
 }
+
+// UIリセット
+this.uiBanner.classList.remove("show");
+this.uiName.classList.remove("show");
+this.uiVote.classList.remove("show");
+
+this.uiShown.banner = false;
+this.uiShown.name = false;
+this.uiShown.vote = false;
 
     },
 
@@ -1105,6 +1208,37 @@ if (elapsed >= 2.4) {
 this.updateBlink(elapsed);
 
 
+// ----------------------------------------------
+// UI表示
+// ----------------------------------------------
+
+// 3人が揃って少ししてからバナー
+if (
+  elapsed >= 2.7 &&
+  !this.uiShown.banner
+) {
+  this.uiBanner.classList.add("show");
+  this.uiShown.banner = true;
+}
+
+// バナーのあとに名前
+if (
+  elapsed >= 3.1 &&
+  !this.uiShown.name
+) {
+  this.uiName.classList.add("show");
+  this.uiShown.name = true;
+}
+
+// 最後に投票誘導
+if (
+  elapsed >= 3.5 &&
+  !this.uiShown.vote
+) {
+  this.uiVote.classList.add("show");
+  this.uiShown.vote = true;
+}
+
 if (elapsed >= 2.05) {
   this.status.textContent =
     "星輝子、召喚！";
@@ -1152,6 +1286,34 @@ if (elapsed >= 2.05) {
   <div id="status">
     ARを準備しています
   </div>
+
+
+<!-- ==================================================
+     AR演出後に表示するUI
+================================================== -->
+
+<div id="ar-ui">
+
+  <img
+    id="ui-banner"
+    src="../assets/ui/banner_election.png"
+    alt="シンデレラガール総選挙開催中"
+  >
+
+  <img
+    id="ui-name"
+    src="../assets/ui/name.png"
+    alt="星輝子"
+  >
+
+  <img
+    id="ui-vote"
+    src="../assets/ui/vote.png"
+    alt="投票はこちら"
+  >
+
+</div>
+
 
   <a-scene
     mindar-image="
