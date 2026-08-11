@@ -204,8 +204,6 @@ video {
   transform: none;
 }
 
-
-
 /* ==================================================
    星輝子ロゴ：透明部分を除外したキラッ
 ================================================== */
@@ -281,6 +279,44 @@ video {
   100% {
     opacity: 0;
     background-position: -30% 0;
+  }
+}
+
+
+@keyframes nameBurstIn {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      translateX(-50%)
+      scale(0.12)
+      rotate(-7deg);
+  }
+
+  55% {
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      scale(1.16)
+      rotate(-7deg);
+  }
+
+  78% {
+    transform:
+      translateX(-50%)
+      scale(0.94)
+      rotate(-7deg);
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      scale(1)
+      rotate(-7deg);
   }
 }
 
