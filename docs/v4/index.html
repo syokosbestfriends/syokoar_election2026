@@ -169,7 +169,6 @@ video {
   width: min(52vw, 320px);
 
   pointer-events: auto;
-  overflow: hidden;
 
   opacity: 0;
 
@@ -207,104 +206,84 @@ video {
 
 
 
-@keyframes nameBurstIn {
-
-  0% {
-    opacity: 0;
-
-    transform:
-      translateX(-50%)
-      scale(0.12)
-      rotate(-7deg);
-  }
-
-  55% {
-    opacity: 1;
-
-    transform:
-      translateX(-50%)
-      scale(1.16)
-      rotate(-7deg);
-  }
-
-  78% {
-    transform:
-      translateX(-50%)
-      scale(0.94)
-      rotate(-7deg);
-  }
-
-  100% {
-    opacity: 1;
-
-    transform:
-      translateX(-50%)
-      scale(1)
-      rotate(-7deg);
-  }
-}
-
-
-
 /* ==================================================
-   星輝子ロゴ：キラッと光が走る
+   星輝子ロゴ：透明部分を除外したキラッ
 ================================================== */
 
-#name-link::after {
-  content: "";
-
+#name-shine {
   position: absolute;
-
-  top: -30%;
-  left: -45%;
-
-  width: 22%;
-  height: 160%;
+  inset: 0;
 
   pointer-events: none;
 
   opacity: 0;
 
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.85),
-    rgba(255, 255, 255, 0)
-  );
+  /*
+   * name.pngのアルファチャンネルを
+   * そのままマスクとして使用
+   */
+  -webkit-mask-image:
+    url("../assets/ui/name.png");
+  mask-image:
+    url("../assets/ui/name.png");
 
-  transform:
-    skewX(-18deg)
-    translateX(0);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-position: center;
+  mask-position: center;
+
+  /*
+   * 光そのもの
+   */
+  background:
+    linear-gradient(
+      105deg,
+      transparent 0%,
+      transparent 35%,
+      rgba(255,255,255,0.25) 43%,
+      rgba(255,255,255,1) 50%,
+      rgba(255,255,255,0.35) 57%,
+      transparent 65%,
+      transparent 100%
+    );
+
+  background-size: 300% 100%;
+  background-position: 130% 0;
 }
 
 
-/* ロゴ登場後に一度だけ走る */
-#name-link.show::after {
+/* ロゴ登場後、一度だけ光を走らせる */
+#name-link.show #name-shine {
   animation:
-    nameShine 0.55s ease-out 0.48s 1 forwards;
+    nameMaskedShine 0.62s ease-out 0.48s 1 forwards;
 }
 
 
-@keyframes nameShine {
+@keyframes nameMaskedShine {
 
   0% {
-    left: -45%;
     opacity: 0;
+    background-position: 130% 0;
   }
 
-  15% {
+  10% {
     opacity: 1;
   }
 
-  85% {
+  90% {
     opacity: 1;
   }
 
   100% {
-    left: 125%;
     opacity: 0;
+    background-position: -30% 0;
   }
 }
+
 
 
 
@@ -1539,11 +1518,16 @@ if (
   target="_blank"
   rel="noopener noreferrer"
 >
+
   <img
     id="ui-name"
     src="../assets/ui/name.png"
     alt="星輝子"
   >
+
+  <!-- 文字部分だけに出る光 -->
+  <span id="name-shine"></span>
+
 </a>
 
   <a
