@@ -341,6 +341,46 @@ video {
 /* 投票ボタン表示 */
 #vote-link.show {
   opacity: 1;
+
+  animation:
+    votePulse 3.2s ease-in-out 0.8s infinite;
+}
+
+/* ==================================================
+   投票ボタン：控えめな脈動
+================================================== */
+
+@keyframes votePulse {
+
+  /* 基本は静止 */
+  0%,
+  72%,
+  100% {
+    transform:
+      translateX(-50%)
+      scale(1);
+  }
+
+  /* 少しだけ手前へ */
+  78% {
+    transform:
+      translateX(-50%)
+      scale(1.055);
+  }
+
+  /* 一度戻す */
+  84% {
+    transform:
+      translateX(-50%)
+      scale(0.985);
+  }
+
+  /* 定位置 */
+  90% {
+    transform:
+      translateX(-50%)
+      scale(1);
+  }
 }
 
 
