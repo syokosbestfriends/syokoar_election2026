@@ -169,6 +169,7 @@ video {
   width: min(52vw, 320px);
 
   pointer-events: auto;
+  overflow: hidden;
 
   opacity: 0;
 
@@ -242,6 +243,69 @@ video {
       rotate(-7deg);
   }
 }
+
+
+
+/* ==================================================
+   星輝子ロゴ：キラッと光が走る
+================================================== */
+
+#name-link::after {
+  content: "";
+
+  position: absolute;
+
+  top: -30%;
+  left: -45%;
+
+  width: 22%;
+  height: 160%;
+
+  pointer-events: none;
+
+  opacity: 0;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0)
+  );
+
+  transform:
+    skewX(-18deg)
+    translateX(0);
+}
+
+
+/* ロゴ登場後に一度だけ走る */
+#name-link.show::after {
+  animation:
+    nameShine 0.55s ease-out 0.48s 1 forwards;
+}
+
+
+@keyframes nameShine {
+
+  0% {
+    left: -45%;
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 125%;
+    opacity: 0;
+  }
+}
+
 
 
 /* ==================================================
