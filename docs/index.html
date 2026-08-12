@@ -175,6 +175,9 @@ video {
         sans-serif;
       font-size: 13px;
       text-align: center;
+
+      white-space: pre-line;
+      text-align: center;
     }
 
 
@@ -595,13 +598,30 @@ video {
 
 .startup-loader-text {
   color: #ffffff;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
 
-  font-size: 15px;
-  font-weight: 600;
 
-  letter-spacing: 0.08em;
+/* 1行目 */
+.startup-loader-main {
+  font-size: 16px;
+  font-weight: 700;
 
-  opacity: 0.9;
+  line-height: 1.5;
+}
+
+
+/* 2行目 */
+.startup-loader-sub {
+  margin-top: 6px;
+
+  font-size: 12px;
+  font-weight: 400;
+
+  line-height: 1.5;
+
+  opacity: 0.7;
 }
 
 
@@ -753,8 +773,8 @@ this.silhouetteReady = false;
         console.time("認識から演出開始");
 
         this.guide.classList.add("hidden");
-        this.status.textContent = "召喚中…
-        ※読み込みが遅い場合はリロード！";
+        this.status.textContent =
+        "召喚中…\n※読み込みが遅い場合はリロード！";
 
         this.startSequence();
       });
@@ -2283,9 +2303,16 @@ if (
   </div>
 
   <div class="startup-loader-text">
+
+  <div class="startup-loader-main">
     ARを準備しています…
-    ※初回起動は時間がかかる可能性があります
   </div>
+
+  <div class="startup-loader-sub">
+    初回起動は少し時間がかかります
+  </div>
+
+</div>
 
 </div>
 
