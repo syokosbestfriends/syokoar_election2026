@@ -796,7 +796,116 @@ createSilhouettePoints: function () {
 
 
 
-    createParticles: function () {
+// ==================================================
+// 軽量胞子生成
+// ==================================================
+
+createParticles: function () {
+
+  const totalCount = 230;
+
+  const positions =
+    new Float32Array(totalCount * 3);
+
+  const startPositions =
+    new Float32Array(totalCount * 3);
+
+  const targetPositions =
+    new Float32Array(totalCount * 3);
+
+  const phases =
+    new Float32Array(totalCount);
+
+  const allTargets = [
+    ...this.silhouettePoints.cu,
+    ...this.silhouettePoints.co,
+    ...this.silhouettePoints.pa
+  ];
+
+  for (let i = 0; i < totalCount; i++) {
+
+    const startX =
+      (Math.random() - 0.5) * 1.8;
+
+    const startY =
+      (Math.random() - 0.5) * 1.6;
+
+    const startZ =
+      0.06 + Math.random() * 0.18;
+
+    positions[i * 3] = startX;
+    positions[i * 3 + 1] = startY;
+    positions[i * 3 + 2] = startZ;
+
+    startPositions[i * 3] = startX;
+    startPositions[i * 3 + 1] = startY;
+    startPositions[i * 3 + 2] = startZ;
+
+    const target =
+      allTargets[i % allTargets.length];
+
+    targetPositions[i * 3] =
+      target.x;
+
+    targetPositions[i * 3 + 1] =
+      target.y;
+
+    targetPositions[i * 3 + 2] =
+      target.z;
+
+    phases[i] =
+      Math.random() * Math.PI * 2;
+  }
+
+  const geometry =
+    new THREE.BufferGeometry();
+
+  geometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+      positions,
+      3
+    )
+  );
+
+  const material =
+    new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 0.022,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+
+  this.particleSystem =
+    new THREE.Points(
+      geometry,
+      material
+    );
+
+  this.el.object3D.add(
+    this.particleSystem
+  );
+
+  this.particleData = {
+    positions,
+    startPositions,
+    targetPositions,
+    phases,
+    totalCount
+  };
+
+  this.particleSystem.visible = false;
+
+  console.log(
+    "軽量胞子生成完了",
+    totalCount
+  );
+
+},
+
+
 
     // ==================================================
     // 菌糸生成
