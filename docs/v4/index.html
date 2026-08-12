@@ -877,6 +877,60 @@ createParticles: function () {
     )
   );
 
+  // ==================================================
+// 丸い胞子テクスチャを生成
+// ==================================================
+
+const particleCanvas =
+  document.createElement("canvas");
+
+particleCanvas.width = 64;
+particleCanvas.height = 64;
+
+const particleCtx =
+  particleCanvas.getContext("2d");
+
+const gradient =
+  particleCtx.createRadialGradient(
+    32, 32, 0,
+    32, 32, 32
+  );
+
+gradient.addColorStop(
+  0,
+  "rgba(255,255,255,1)"
+);
+
+gradient.addColorStop(
+  0.55,
+  "rgba(255,255,255,0.95)"
+);
+
+gradient.addColorStop(
+  0.82,
+  "rgba(255,255,255,0.45)"
+);
+
+gradient.addColorStop(
+  1,
+  "rgba(255,255,255,0)"
+);
+
+particleCtx.fillStyle = gradient;
+
+particleCtx.fillRect(
+  0,
+  0,
+  64,
+  64
+);
+
+const particleTexture =
+  new THREE.CanvasTexture(
+    particleCanvas
+  );
+
+
   const material =
   new THREE.PointsMaterial({
     color: 0xffffff,
