@@ -1478,8 +1478,9 @@ updateBlink: function (elapsed) {
       const elapsed =
         (time - this.animationStartTime) / 1000;
 
-      // ----------------------------------------------
-// 0〜1.55秒：胞子が3人のシルエットへ集まる
+// ----------------------------------------------
+// 0〜2.95秒：
+// 胞子集合 → シルエット保持 → 立ち絵と交代
 // ----------------------------------------------
 
 if (
@@ -1488,22 +1489,6 @@ if (
 ) {
 
   this.particleSystem.visible = true;
-
-  // デバッグ用：胞子を強制的に見える状態にする
-  this.particleSystem.material.opacity = 1;
-
-  const progress =
-    Math.min(
-      elapsed / 1.55,
-      1
-    );
-
-  const eased =
-    1 -
-    Math.pow(
-      1 - progress,
-      3
-    );
 
   const pos =
     this.particleData.positions;
@@ -1517,50 +1502,138 @@ if (
   const phases =
     this.particleData.phases;
 
+
+  // ==============================================
+  // ① 0〜1.45秒：シルエットへ集合
+  // ==============================================
+
+  const gatherDuration = 1.45;
+
+  const gatherProgress =
+    Math.min(
+      elapsed / gatherDuration,
+      1
+    );
+
+  const eased =
+    1 -
+    Math.pow(
+      1 - gatherProgress,
+      3
+    );
+
+
   for (
     let i = 0;
     i < this.particleData.totalCount;
     i++
   ) {
 
-    const base =
-      i * 3;
+    const base = i * 3;
 
     const phase =
       phases[i];
 
-    // 途中は少し渦を巻く
+    // 集合途中だけ軽く漂わせる
     const swirl =
       (1 - eased) * 0.045;
 
+
     pos[base] =
       start[base] +
-      (target[base] - start[base]) *
-      eased +
+      (
+        target[base] -
+        start[base]
+      ) * eased +
       Math.sin(
         elapsed * 4.2 + phase
       ) * swirl;
 
+
     pos[base + 1] =
       start[base + 1] +
-      (target[base + 1] - start[base + 1]) *
-      eased +
+      (
+        target[base + 1] -
+        start[base + 1]
+      ) * eased +
       Math.cos(
         elapsed * 3.8 + phase
       ) * swirl;
 
+
     pos[base + 2] =
       start[base + 2] +
-      (target[base + 2] - start[base + 2]) *
-      eased;
+      (
+        target[base + 2] -
+        start[base + 2]
+      ) * eased;
   }
+
 
   this.particleSystem.geometry
     .attributes.position
     .needsUpdate = true;
 
-  
+
+  // ==============================================
+  // ② 最初だけふわっと出現
+  // ==============================================
+
+  if (elapsed < 0.18) {
+
+    this.particleSystem.material.opacity =
+      elapsed / 0.18;
+
+  }
+
+  // ==============================================
+  // ③ 1.45〜1.80秒：
+  // 完成したシルエットをそのまま見せる
+  // ==============================================
+
+  else if (elapsed < 1.80) {
+
+    this.particleSystem.material.opacity = 1;
+
+  }
+
+  // ==============================================
+  // ④ 1.80〜2.95秒：
+  // 立ち絵登場に合わせて胞子を消す
+  // ==============================================
+
+  else if (elapsed < 2.95) {
+
+    const fadeProgress =
+      Math.min(
+        (elapsed - 1.80) /
+        (2.95 - 1.80),
+        1
+      );
+
+    // 少し滑らかに減衰
+    const smoothFade =
+      fadeProgress *
+      fadeProgress *
+      (3 - 2 * fadeProgress);
+
+    this.particleSystem.material.opacity =
+      1 - smoothFade;
+
+  }
+
+  // ==============================================
+  // ⑤ 完全終了
+  // ==============================================
+
+  else {
+
+    this.particleSystem.material.opacity = 0;
+    this.particleSystem.visible = false;
+
+  }
 }
+
 
       // ----------------------------------------------
       // 0.32～1.4秒：菌糸成長
@@ -1701,10 +1774,10 @@ if (elapsed >= 1.22 && elapsed <= 1.62) {
       // 1.25秒以降：Cu登場
       // ----------------------------------------------
 
-      if (elapsed >= 1.25) {
+      if (elapsed >= 1.80) {
         const characterProgress =
           Math.min(
-            (elapsed - 1.25) / 0.72,
+            (elapsed - 1.80) / 0.55,
             1
           );
 
@@ -1743,15 +1816,12 @@ this.character.object3D.position.y =
 // Co
 //----------------------------------
 
-if(elapsed>=1.60){
+if(elapsed>=2.10){
 
-    const p=Math.min(
-
-        (elapsed-1.60)/0.55,
-
-        1
-
-    );
+  const p=Math.min(
+    (elapsed-2.10)/0.55,
+    1
+  );
 
     const eased=
 
@@ -1785,15 +1855,12 @@ if(elapsed>=1.60){
 // Pa
 //----------------------------------
 
-if(elapsed>=1.95){
+if(elapsed>=2.40){
 
-    const p=Math.min(
-
-        (elapsed-1.95)/0.55,
-
-        1
-
-    );
+  const p=Math.min(
+    (elapsed-2.40)/0.55,
+    1
+  );
 
     const eased=
 
