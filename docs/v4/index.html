@@ -905,12 +905,22 @@ createParticles: function () {
     totalCount
   };
 
+  // すでに演出が始まっていたら、その場で胞子を表示
+if (this.animationStarted) {
+
+  this.particleSystem.visible = true;
+  this.particleSystem.material.opacity = 0;
+
+} else {
+
   this.particleSystem.visible = false;
 
-  console.log(
-    "軽量胞子生成完了",
-    totalCount
-  );
+}
+
+console.log(
+  "軽量胞子生成完了",
+  totalCount
+);
 
 },
 
@@ -1396,6 +1406,8 @@ if (
   this.particleSystem &&
   this.silhouetteReady
 ) {
+
+  this.particleSystem.visible = true;
 
   const progress =
     Math.min(
