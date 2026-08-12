@@ -534,7 +534,6 @@ this.silhouetteReady = false;
       this.nextBlinkTime = 0;
       this.nextBlinkChangeTime = 0;
 
-      this.createParticles();
       this.createSilhouettePoints();
       this.createMycelium();
 
@@ -764,15 +763,18 @@ createSilhouettePoints: function () {
       );
 
       if (
-        completed === targets.length
-      ) {
+  completed === targets.length
+) {
 
-        this.silhouetteReady = true;
+  this.silhouetteReady = true;
 
-        console.log(
-          "3人分シルエット座標生成完了"
-        );
-      }
+  console.log(
+    "3人分シルエット座標生成完了"
+  );
+
+  // シルエット座標が完成してから胞子生成
+  this.createParticles();
+}
     };
 
     if (
@@ -801,6 +803,13 @@ createSilhouettePoints: function () {
 // ==================================================
 
 createParticles: function () {
+
+  if (!this.silhouetteReady) {
+    console.warn(
+      "シルエット座標が未完成なので胞子生成を待機"
+    );
+    return;
+  }
 
   const totalCount = 230;
 
