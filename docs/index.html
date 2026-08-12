@@ -161,6 +161,15 @@ video {
       transform: translateX(-50%);
       z-index: 10000;
 
+     /* 黒背景の上下余白を狭く */
+      padding: 7px 14px;
+
+      /* 行間を詰める */
+      line-height: 1.2;
+
+      /* 背景サイズを内容に合わせる */
+      display: inline-block;
+
       width: max-content;
       max-width: calc(100vw - 32px);
       padding: 8px 14px;
@@ -179,24 +188,24 @@ video {
       white-space: pre-line;
       text-align: center;
 
-      .status-main {
+.status-main {
   display: block;
 
   font-size: 20px;
   font-weight: 700;
 
-  line-height: 1.5;
+  line-height: 1.15;
 }
 
 .status-sub {
   display: block;
 
-  margin-top: 4px;
+  margin-top: 1px;
 
   font-size: 14px;
   font-weight: 400;
 
-  line-height: 1.5;
+  line-height: 1.15;
 }
     }
 
@@ -2211,8 +2220,9 @@ if (
   elapsed >= 2.05 &&
   elapsed < 3.5
 ) {
-  this.status.textContent =
-    "星輝子、召喚！";
+  this.status.innerHTML = `
+  <span class="status-main">星輝子、召喚！</span>
+  `;
 }
 
 } // ← tick終了
