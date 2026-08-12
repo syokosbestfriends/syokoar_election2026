@@ -94,6 +94,9 @@
   <!-- MindAR Image Tracking / A-Frame版 -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
+
+
+
   <style>
     html,
 body {
@@ -101,7 +104,7 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: transparent;
+  background: #000;
 }
 
 /* MindARが自動生成するカメラ映像 */
@@ -2309,15 +2312,23 @@ if (
 
   if (startupLoader) {
 
-    startupLoader.classList.add("hide");
-
+    // カメラ画面への切り替えを少し待ってから消す
     setTimeout(() => {
-      startupLoader.remove();
-    }, 500);
+
+      startupLoader.classList.add("hide");
+
+      setTimeout(() => {
+        startupLoader.remove();
+      }, 450);
+
+    }, 700);
 
   }
 
 });
+
+
+
 
     scene.addEventListener(
       "arError",
@@ -2390,30 +2401,56 @@ if (
 
 </div>
 
-<!-- ==================================================
-     初回ロード表示
-================================================== -->
+<div id="startup-loader">
 
-<div class="startup-profile">
+  <!-- 自己紹介 -->
+  <div class="startup-profile">
 
-  <div class="profile-line profile-line-1">
-    出身：福島
+    <div class="profile-line profile-line-1">
+      出身：福島
+    </div>
+
+    <div class="profile-line profile-line-2">
+      趣味：キノコ栽培
+    </div>
+
+    <div class="profile-line profile-line-3">
+      好きな音楽ジャンル：メタル
+    </div>
+
+    <div class="profile-line profile-line-4">
+      普段はぼっちジメジメガールだが…
+    </div>
+
+    <div class="profile-line profile-line-5">
+      ステージ上では圧倒的カリスマ！
+    </div>
+
   </div>
 
-  <div class="profile-line profile-line-2">
-    趣味：キノコ栽培
+
+  <!-- miniキャラ -->
+  <div class="startup-mini">
+
+    <img
+      src="/syokoar_election2026/assets/ui/loading_mini.png"
+      alt=""
+    >
+
   </div>
 
-  <div class="profile-line profile-line-3">
-    好きな音楽ジャンル：メタル
-  </div>
 
-  <div class="profile-line profile-line-4">
-    普段はぼっちジメジメガールだが…
-  </div>
+  <!-- ロード文言 -->
+  <div class="startup-loader-text">
 
-  <div class="profile-line profile-line-5">
-    ステージ上では圧倒的カリスマ！
+    <div class="startup-loader-main">
+      ARを準備しています…
+    </div>
+
+    <div class="startup-loader-sub">
+      初回起動は少し時間がかかります
+    </div>
+
   </div>
 
 </div>
