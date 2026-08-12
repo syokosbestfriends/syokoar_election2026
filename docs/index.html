@@ -603,7 +603,7 @@ video {
    初回ロード：デフォルメキャラ
 ================================================== */
 
-.startup-chibi {
+.startup-mini {
   width: 150px;
   aspect-ratio: 1 / 1;
 
@@ -612,7 +612,7 @@ video {
   justify-content: center;
 }
 
-.startup-chibi img {
+.startup-mini img {
   display: block;
 
   width: 100%;
@@ -622,7 +622,7 @@ video {
   transform-origin: center bottom;
 
   animation:
-    chibiLoading 1.8s steps(1, end) infinite;
+    miniLoading 1.8s steps(1, end) infinite;
 }
 
 
@@ -631,7 +631,7 @@ video {
    左 → 右 → 左
 ================================================== */
 
-@keyframes chibiLoading {
+@keyframes miniLoading {
   0% {
     transform: rotate(-6deg);
   }
@@ -2344,46 +2344,38 @@ if (
 
 <div id="startup-loader">
 
-<div class="startup-profile">
-  <div>出身：福島</div>
-  <div>趣味：キノコ栽培</div>
-  <div>歌唱ジャンル：メタル</div>
+  <div class="startup-profile">
+    <div>出身：福島</div>
+    <div>趣味：キノコ栽培</div>
+    <div>好きな音楽ジャンル：メタル</div>
 
-  <div class="startup-profile-gap">
-    普段はぼっちジメジメガールだが…
+    <div class="startup-profile-gap">
+      普段はぼっちジメジメガールだが…
+    </div>
+
+    <div class="startup-profile-highlight">
+      ステージ上では圧倒的カリスマ！
+    </div>
   </div>
 
-  <div class="startup-profile-highlight">
-    ステージ上では圧倒的カリスマ！
-  </div>
-</div>
-
-<div class="startup-chibi">
-  <img
-    src="/syokoar_election2026/assets/ui/loading_mini.png"
-    alt=""
-  >
-</div>
-
-
-  <div class="startup-chibi">
-  <img
-    src="/syokoar_election2026/assets/ui/loading_mini.png"
-    alt=""
-  >
+  <div class="startup-mini">
+    <img
+      src="/syokoar_election2026/assets/ui/loading_mini.png"
+      alt=""
+    >
   </div>
 
   <div class="startup-loader-text">
 
-  <div class="startup-loader-main">
-    ARを準備しています…
-  </div>
+    <div class="startup-loader-main">
+      ARを準備しています…
+    </div>
 
-  <div class="startup-loader-sub">
-    初回起動は少し時間がかかります
-  </div>
+    <div class="startup-loader-sub">
+      初回起動は少し時間がかかります
+    </div>
 
-</div>
+  </div>
 
 </div>
 
