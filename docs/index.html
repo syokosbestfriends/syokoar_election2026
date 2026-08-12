@@ -500,6 +500,7 @@ video {
 
     console.time("AR初期化");
     console.time("シルエット準備");
+    this.particleStartedLogged = false;
 
       this.character = document.querySelector("#cu-character");
 this.characterGlow =
@@ -621,6 +622,9 @@ this.silhouetteReady = false;
 
       this.el.addEventListener("targetFound", () => {
         console.log("認識成功");
+        console.time("認識から演出開始");
+        this.particleStartedLogged = false;
+        console.time("認識から演出開始");
 
         this.guide.classList.add("hidden");
         this.status.textContent = "召喚中… ※読み込みが遅い場合はリロード！";
@@ -1572,6 +1576,15 @@ if (
   this.particleSystem &&
   this.silhouetteReady
 ) {
+
+  if (!this.particleStartedLogged) {
+
+  console.timeEnd(
+    "認識から演出開始"
+  );
+
+  this.particleStartedLogged = true;
+}
 
   this.particleSystem.visible = true;
 
