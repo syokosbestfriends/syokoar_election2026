@@ -146,7 +146,7 @@ video {
   top: auto;
 
   /* Paの足元付近 */
-  bottom: 23%;
+  bottom: 25%;
 
   width: min(78vw, 470px);
 
@@ -519,6 +519,14 @@ this.uiShown = {
       this.particles = [];
       this.myceliumBranches = [];
 
+      this.silhouettePoints = {
+       cu: [],
+       co: [],
+       pa: []
+      };
+
+this.silhouetteReady = false;
+
       this.animationStarted = false;
       this.animationStartTime = 0;
 
@@ -527,6 +535,7 @@ this.uiShown = {
       this.nextBlinkChangeTime = 0;
 
       this.createParticles();
+      this.createSilhouettePoints();
       this.createMycelium();
 
       this.el.addEventListener("targetFound", () => {
@@ -554,6 +563,238 @@ this.uiShown = {
     // ==================================================
     // 胞子生成
     // ==================================================
+
+
+    // ==================================================
+// PNGからシルエット座標を生成
+// ==================================================
+
+createSilhouettePoints: function () {
+
+  const targets = [
+    {
+      key: "cu",
+      imageId: "cu-open",
+      centerX: -0.40,
+      centerY: 0.47,
+      width: 0.90,
+      height: 1.35,
+      count: 70
+    },
+
+    {
+      key: "co",
+      imageId: "co-open",
+      centerX: 0.30,
+      centerY: 0.54,
+      width: 0.925,
+      height: 1.386,
+      count: 70
+    },
+
+    {
+      key: "pa",
+      imageId: "pa-open",
+      centerX: 0,
+      centerY: 0.25,
+      width: 0.925,
+      height: 1.386,
+      count: 90
+    }
+  ];
+
+  let completed = 0;
+
+  targets.forEach((target) => {
+
+    const img =
+      document.querySelector(`#${target.imageId}`);
+
+    if (!img) {
+      console.error(
+        "シルエット用画像が見つからない:",
+        target.imageId
+      );
+      return;
+    }
+
+    const processImage = () => {
+
+      const canvas =
+        document.createElement("canvas");
+
+      const ctx =
+        canvas.getContext("2d", {
+          willReadFrequently: true
+        });
+
+      const sampleWidth = 120;
+
+      const ratio =
+        img.naturalHeight /
+        img.naturalWidth;
+
+      const sampleHeight =
+        Math.round(
+          sampleWidth * ratio
+        );
+
+      canvas.width =
+        sampleWidth;
+
+      canvas.height =
+        sampleHeight;
+
+      ctx.clearRect(
+        0,
+        0,
+        sampleWidth,
+        sampleHeight
+      );
+
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        sampleWidth,
+        sampleHeight
+      );
+
+      const imageData =
+        ctx.getImageData(
+          0,
+          0,
+          sampleWidth,
+          sampleHeight
+        );
+
+      const candidates = [];
+
+      for (
+        let y = 0;
+        y < sampleHeight;
+        y += 2
+      ) {
+
+        for (
+          let x = 0;
+          x < sampleWidth;
+          x += 2
+        ) {
+
+          const index =
+            (y * sampleWidth + x) * 4;
+
+          const alpha =
+            imageData.data[index + 3];
+
+          if (alpha > 80) {
+
+            candidates.push({
+              x,
+              y
+            });
+
+          }
+        }
+      }
+
+      // シャッフル
+      for (
+        let i = candidates.length - 1;
+        i > 0;
+        i--
+      ) {
+
+        const j =
+          Math.floor(
+            Math.random() * (i + 1)
+          );
+
+        [
+          candidates[i],
+          candidates[j]
+        ] = [
+          candidates[j],
+          candidates[i]
+        ];
+      }
+
+      const selected =
+        candidates.slice(
+          0,
+          target.count
+        );
+
+      this.silhouettePoints[target.key] =
+        selected.map((point) => {
+
+          const normalizedX =
+            point.x /
+            sampleWidth -
+            0.5;
+
+          const normalizedY =
+            0.5 -
+            point.y /
+            sampleHeight;
+
+          return {
+            x:
+              target.centerX +
+              normalizedX *
+              target.width,
+
+            y:
+              target.centerY +
+              normalizedY *
+              target.height,
+
+            z:
+              0.07 +
+              Math.random() * 0.025
+          };
+        });
+
+      completed++;
+
+      console.log(
+        `${target.key} シルエット生成完了`,
+        this.silhouettePoints[target.key].length
+      );
+
+      if (
+        completed === targets.length
+      ) {
+
+        this.silhouetteReady = true;
+
+        console.log(
+          "3人分シルエット座標生成完了"
+        );
+      }
+    };
+
+    if (
+      img.complete &&
+      img.naturalWidth > 0
+    ) {
+
+      processImage();
+
+    } else {
+
+      img.addEventListener(
+        "load",
+        processImage,
+        { once: true }
+      );
+
+    }
+  });
+},
+
+
 
     createParticles: function () {
       const colors = [
