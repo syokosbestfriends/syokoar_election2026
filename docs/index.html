@@ -619,11 +619,10 @@ video {
   height: 100%;
 
   object-fit: contain;
-
   transform-origin: center bottom;
 
   animation:
-    chibiLoading 1.05s steps(1, end) infinite;
+    chibiLoading 1.8s steps(1, end) infinite;
 }
 
 
@@ -633,21 +632,14 @@ video {
 ================================================== */
 
 @keyframes chibiLoading {
-
-  /* 1コマ目：左 */
-  0%,
-  32% {
+  0% {
     transform: rotate(-6deg);
   }
 
-  /* 2コマ目：右 */
-  33%,
-  65% {
+  50% {
     transform: rotate(6deg);
   }
 
-  /* 3コマ目：左 */
-  66%,
   100% {
     transform: rotate(-6deg);
   }
