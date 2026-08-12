@@ -104,7 +104,7 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: #000;
+  background: transparent;
 }
 
 /* MindARが自動生成するカメラ映像 */
@@ -532,8 +532,9 @@ video {
 #startup-loader {
   position: fixed;
   inset: 0;
-
   z-index: 20000;
+
+  background: #000;
 
   display: flex;
   flex-direction: column;
