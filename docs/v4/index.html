@@ -898,21 +898,47 @@ particleCtx.clearRect(
   64
 );
 
-// 真ん中に白い円を描く
-particleCtx.beginPath();
+// 中心が明るく、外周がぼんやり消える胞子
+const gradient =
+  particleCtx.createRadialGradient(
+    32, 32, 0,
+    32, 32, 30
+  );
 
-particleCtx.arc(
-  32,
-  32,
-  27,
+gradient.addColorStop(
   0,
-  Math.PI * 2
+  "rgba(255, 255, 255, 1)"
+);
+
+gradient.addColorStop(
+  0.45,
+  "rgba(255, 255, 255, 1)"
+);
+
+gradient.addColorStop(
+  0.70,
+  "rgba(255, 255, 255, 0.75)"
+);
+
+gradient.addColorStop(
+  0.88,
+  "rgba(255, 255, 255, 0.3)"
+);
+
+gradient.addColorStop(
+  1,
+  "rgba(255, 255, 255, 0)"
 );
 
 particleCtx.fillStyle =
-  "rgba(255, 255, 255, 1)";
+  gradient;
 
-particleCtx.fill();
+particleCtx.fillRect(
+  0,
+  0,
+  64,
+  64
+);
 
 const particleTexture =
   new THREE.CanvasTexture(
@@ -935,7 +961,7 @@ particleTexture.needsUpdate = true;
 
     opacity: 1,
 
-    alphaTest: 0.5,
+    alphaTest: 0.02,
 
     depthWrite: false,
 
