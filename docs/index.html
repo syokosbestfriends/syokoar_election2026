@@ -2315,6 +2315,28 @@ window.addEventListener("DOMContentLoaded", () => {
   let startupLoaderClosed = false;
 
 
+window.addEventListener("DOMContentLoaded", () => {
+
+  const scene =
+    document.querySelector("a-scene");
+
+  const status =
+    document.querySelector("#status");
+
+
+  // ==============================================
+  // ローディング画面
+  // ==============================================
+
+  const startupLoader =
+    document.querySelector("#startup-loader");
+
+  const startupStartedAt =
+    performance.now();
+
+  let startupLoaderClosed = false;
+
+
   const closeStartupLoader = () => {
 
     if (startupLoaderClosed) return;
@@ -2352,73 +2374,79 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
   // ==============================================
-  // 実際にカメラ映像が再生されるまで待つ
+  // カメラ映像が実際に再生されるまで待つ
   // ==============================================
 
   const waitForCameraVideo = () => {
 
-  const video =
-    document.querySelector("video");
+    const video =
+      document.querySelector("video");
 
-  if (!video) {
+    if (!video) {
 
-    requestAnimationFrame(
-      waitForCameraVideo
-    );
+      requestAnimationFrame(
+        waitForCameraVideo
+      );
 
-    return;
-  }
+      return;
+    }
 
-  // すでに再生されている場合
-  if (
-    video.readyState >= 2 &&
-    !video.paused
-  ) {
 
-    console.log(
-      "カメラ映像再生確認"
-    );
-
-    closeStartupLoader();
-
-    return;
-  }
-
-  // 再生開始を待つ
-  video.addEventListener(
-    "playing",
-    () => {
+    // すでに再生開始済み
+    if (
+      video.readyState >= 2 &&
+      !video.paused
+    ) {
 
       console.log(
-        "カメラ映像再生開始"
+        "カメラ映像再生確認"
       );
 
       closeStartupLoader();
 
-    },
-    { once: true }
-  );
-};
+      return;
+    }
 
 
+    // これから再生される場合
+    video.addEventListener(
+      "playing",
+      () => {
+
+        console.log(
+          "カメラ映像再生開始"
+        );
+
+        closeStartupLoader();
+
+      },
+      { once: true }
+    );
+  };
 
 
   waitForCameraVideo();
 
 
   // ==============================================
-  // MindAR起動完了
+  // MindAR起動成功
   // ==============================================
 
   scene.addEventListener("arReady", () => {
 
-    console.log("MindAR起動成功");
+    console.log(
+      "MindAR起動成功"
+    );
 
     status.textContent =
       "認識画像を探しています";
 
   });
 
+
+  // ==============================================
+  // MindAR起動失敗
+  // ==============================================
 
   scene.addEventListener(
     "arError",
@@ -2431,6 +2459,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       status.textContent =
         "ARの起動に失敗しました";
+
     }
   );
 
@@ -2454,6 +2483,8 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     );
   });
+
+
 </script>
 </head>
 
