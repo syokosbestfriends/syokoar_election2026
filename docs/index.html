@@ -155,59 +155,57 @@ video {
     }
 
     #status {
-      position: fixed;
-      left: 50%;
-      bottom: max(18px, env(safe-area-inset-bottom));
-      transform: translateX(-50%);
-      z-index: 10000;
+  position: fixed;
 
-     /* 黒背景の上下余白を狭く */
-      padding: 7px 14px;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
 
-      /* 行間を詰める */
-      line-height: 1.2;
+  transform: translateX(-50%);
 
-      /* 背景サイズを内容に合わせる */
-      display: inline-block;
+  z-index: 10000;
 
-      width: max-content;
-      max-width: calc(100vw - 32px);
-      padding: 8px 14px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
 
-      color: #fff;
-      background: rgba(0, 0, 0, 0.72);
-      border-radius: 8px;
+  /* 黒背景の余白をコンパクトに */
+  padding: 8px 14px;
 
-      font-family:
-        "Hiragino Sans",
-        "Yu Gothic",
-        sans-serif;
-      font-size: 13px;
-      text-align: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.72);
 
-      white-space: pre-line;
-      text-align: center;
+  border-radius: 8px;
 
+  font-family:
+    "Hiragino Sans",
+    "Yu Gothic",
+    sans-serif;
+
+  text-align: center;
+}
+
+
+/* 1行目：召喚中… / 星輝子、召喚！ */
 .status-main {
   display: block;
 
   font-size: 20px;
   font-weight: 700;
 
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
+
+/* 2行目：補足 */
 .status-sub {
   display: block;
 
-  margin-top: 1px;
+  margin-top: 4px;
 
   font-size: 14px;
   font-weight: 400;
 
   line-height: 1.15;
 }
-    }
 
 
 /* ==================================================
