@@ -685,43 +685,37 @@ video {
 }
 
 
-/* 1行目 */
 .profile-line-1 {
   animation:
     profileShow 0.01s 0.4s forwards;
 }
 
-
-/* 2行目 */
 .profile-line-2 {
   animation:
     profileShow 0.01s 1.2s forwards;
 }
 
-
-/* 3行目 */
 .profile-line-3 {
   animation:
     profileShow 0.01s 2.0s forwards;
 }
 
 
-/* 4行目 */
+/* ここだけ話題転換なので少し長く間を取る */
 .profile-line-4 {
   margin-top: 7px;
 
   animation:
-    profileShow 0.01s 2.8s forwards;
+    profileShow 0.01s 3.3s forwards;
 }
 
 
-/* 5行目 */
 .profile-line-5 {
   font-size: 14px;
   font-weight: 700;
 
   animation:
-    profileShow 0.01s 3.6s forwards;
+    profileShow 0.01s 4.1s forwards;
 }
 
 
@@ -2323,7 +2317,7 @@ window.addEventListener("DOMContentLoaded", () => {
       performance.now() - startupStartedAt;
 
     // 自己紹介の最後の行が出るまで最低4.3秒
-    const minimumDisplayTime = 4300;
+    const minimumDisplayTime = 5700;
 
     const wait =
       Math.max(
