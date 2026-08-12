@@ -1719,58 +1719,9 @@ this.myceliumBranches.forEach((branch) => {
   branch.material.opacity = 0;
 });
 
+
+
 // ----------------------------------------------
-// 1.22～1.62秒：立ち絵自体が一瞬発光
-// ----------------------------------------------
-
-if (elapsed >= 1.22 && elapsed <= 1.62) {
-  const glowProgress =
-    (elapsed - 1.22) / 0.4;
-
-  /*
-   * 最初に強く光り、その後すぐ弱くなる。
-   * 加算合成された同じ立ち絵を重ねているため、
-   * 人物の形に沿って明るく見える。
-   */
-  const glowOpacity =
-    Math.sin(glowProgress * Math.PI) * 0.9;
-
-  const glowScale =
-    0.72 +
-    Math.min(
-      Math.max((elapsed - 1.22) / 0.72, 0),
-      1
-    ) * 0.28;
-
-  this.characterGlow.setAttribute(
-    "scale",
-    `${glowScale * 1.015} ${glowScale * 1.015} ${glowScale * 1.015}`
-  );
-
-  this.characterGlow.setAttribute(
-    "material",
-    "opacity",
-    glowOpacity
-  );
-
-  this.characterGlow.object3D.position.y =
-    this.character.object3D.position.y;
-} else {
-  this.characterGlow.setAttribute(
-    "material",
-    "opacity",
-    0
-  );
-
-  if (elapsed > 1.62) {
-    this.characterGlow.setAttribute(
-      "visible",
-      false
-    );
-  }
-}
-
-      // ----------------------------------------------
 // 1.80秒以降：Cu登場
 // ----------------------------------------------
 
