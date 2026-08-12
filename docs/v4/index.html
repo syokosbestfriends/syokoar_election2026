@@ -877,7 +877,7 @@ createParticles: function () {
     )
   );
 
-  // ==================================================
+// ==================================================
 // 丸い胞子テクスチャを生成
 // ==================================================
 
@@ -890,56 +890,60 @@ particleCanvas.height = 64;
 const particleCtx =
   particleCanvas.getContext("2d");
 
-const gradient =
-  particleCtx.createRadialGradient(
-    32, 32, 0,
-    32, 32, 32
-  );
-
-gradient.addColorStop(
-  0,
-  "rgba(255,255,255,1)"
-);
-
-gradient.addColorStop(
-  0.55,
-  "rgba(255,255,255,0.95)"
-);
-
-gradient.addColorStop(
-  0.82,
-  "rgba(255,255,255,0.45)"
-);
-
-gradient.addColorStop(
-  1,
-  "rgba(255,255,255,0)"
-);
-
-particleCtx.fillStyle = gradient;
-
-particleCtx.fillRect(
+// 背景を完全透明にする
+particleCtx.clearRect(
   0,
   0,
   64,
   64
 );
 
+// 真ん中に白い円を描く
+particleCtx.beginPath();
+
+particleCtx.arc(
+  32,
+  32,
+  27,
+  0,
+  Math.PI * 2
+);
+
+particleCtx.fillStyle =
+  "rgba(255, 255, 255, 1)";
+
+particleCtx.fill();
+
 const particleTexture =
   new THREE.CanvasTexture(
     particleCanvas
   );
 
+particleTexture.needsUpdate = true;
+
 
   const material =
   new THREE.PointsMaterial({
+
+    map: particleTexture,
+
     color: 0xffffff,
+
     size: 35,
+
     transparent: true,
-    opacity: 0,
+
+    opacity: 1,
+
+    alphaTest: 0.5,
+
     depthWrite: false,
-    blending: THREE.AdditiveBlending,
+
+    blending:
+      THREE.AdditiveBlending,
+
     sizeAttenuation: true
+
   });
 
   this.particleSystem =
