@@ -497,6 +497,10 @@ video {
   <script>
   AFRAME.registerComponent("summon-sequence", {
     init: function () {
+
+    console.time("AR初期化");
+    console.time("シルエット準備");
+
       this.character = document.querySelector("#cu-character");
 this.characterGlow =
   document.querySelector("#cu-glow");
@@ -619,7 +623,7 @@ this.silhouetteReady = false;
         console.log("認識成功");
 
         this.guide.classList.add("hidden");
-        this.status.textContent = "召喚中…<br>※読み込みが遅い場合はリロード！";
+        this.status.textContent = "召喚中… ※読み込みが遅い場合はリロード！";
 
         this.startSequence();
       });
@@ -849,6 +853,9 @@ createSilhouettePoints: function () {
   console.log(
     "3人分シルエット座標生成完了"
   );
+
+  console.timeEnd("シルエット準備");
+
 
   // シルエット座標が完成してから胞子生成
   this.createParticles();
@@ -2032,6 +2039,8 @@ if (
 
       status.textContent =
         "認識画像を探しています";
+
+        console.timeEnd("AR初期化");
     });
 
     scene.addEventListener(
