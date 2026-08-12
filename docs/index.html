@@ -670,19 +670,69 @@ video {
 }
 
 
-/* 後半との間を少し空ける */
-.startup-profile-gap {
-  margin-top: 7px;
+/* ==================================================
+   自己紹介：1行ずつ表示
+================================================== */
+
+.profile-line {
+  visibility: hidden;
+
+  line-height: 1.55;
 }
 
 
-/* 最後だけ少し強調 */
-.startup-profile-highlight {
-  margin-top: 1px;
+/* 1行目 */
+.profile-line-1 {
+  animation:
+    profileShow 0.01s 0.4s forwards;
+}
 
+
+/* 2行目 */
+.profile-line-2 {
+  animation:
+    profileShow 0.01s 1.2s forwards;
+}
+
+
+/* 3行目 */
+.profile-line-3 {
+  animation:
+    profileShow 0.01s 2.0s forwards;
+}
+
+
+/* 4行目 */
+.profile-line-4 {
+  margin-top: 7px;
+
+  animation:
+    profileShow 0.01s 2.8s forwards;
+}
+
+
+/* 5行目 */
+.profile-line-5 {
   font-size: 14px;
   font-weight: 700;
+
+  animation:
+    profileShow 0.01s 3.6s forwards;
 }
+
+
+@keyframes profileShow {
+
+  from {
+    visibility: hidden;
+  }
+
+  to {
+    visibility: visible;
+  }
+
+}
+
 
 
   </style>
@@ -2344,39 +2394,26 @@ if (
      初回ロード表示
 ================================================== -->
 
-<div id="startup-loader">
+<div class="startup-profile">
 
-  <div class="startup-profile">
-    <div>出身：福島</div>
-    <div>趣味：キノコ栽培</div>
-    <div>好きな音楽ジャンル：メタル</div>
-
-    <div class="startup-profile-gap">
-      普段はぼっちジメジメガールだが…
-    </div>
-
-    <div class="startup-profile-highlight">
-      ステージ上では圧倒的カリスマ！
-    </div>
+  <div class="profile-line profile-line-1">
+    出身：福島
   </div>
 
-  <div class="startup-mini">
-    <img
-      src="/syokoar_election2026/assets/ui/loading_mini.png"
-      alt=""
-    >
+  <div class="profile-line profile-line-2">
+    趣味：キノコ栽培
   </div>
 
-  <div class="startup-loader-text">
+  <div class="profile-line profile-line-3">
+    好きな音楽ジャンル：メタル
+  </div>
 
-    <div class="startup-loader-main">
-      ARを準備しています…
-    </div>
+  <div class="profile-line profile-line-4">
+    普段はぼっちジメジメガールだが…
+  </div>
 
-    <div class="startup-loader-sub">
-      初回起動は少し時間がかかります
-    </div>
-
+  <div class="profile-line profile-line-5">
+    ステージ上では圧倒的カリスマ！
   </div>
 
 </div>
