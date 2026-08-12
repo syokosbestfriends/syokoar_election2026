@@ -2301,29 +2301,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const status =
     document.querySelector("#status");
 
-
-  // ==============================================
-  // ローディング画面制御
-  // ==============================================
-
-  const startupLoader =
-    document.querySelector("#startup-loader");
-
-  const startupStartedAt =
-    performance.now();
-
-  let startupLoaderClosed = false;
-
-
-window.addEventListener("DOMContentLoaded", () => {
-
-  const scene =
-    document.querySelector("a-scene");
-
-  const status =
-    document.querySelector("#status");
-
-
   // ==============================================
   // ローディング画面
   // ==============================================
@@ -2344,7 +2321,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const elapsed =
       performance.now() - startupStartedAt;
 
-    // 最後の紹介文が出るまで最低4.3秒
+    // 自己紹介の最後の行が出るまで最低4.3秒
     const minimumDisplayTime = 4300;
 
     const wait =
@@ -2374,72 +2351,21 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
   // ==============================================
-  // カメラ映像が実際に再生されるまで待つ
-  // ==============================================
-
-  const waitForCameraVideo = () => {
-
-    const video =
-      document.querySelector("video");
-
-    if (!video) {
-
-      requestAnimationFrame(
-        waitForCameraVideo
-      );
-
-      return;
-    }
-
-
-    // すでに再生開始済み
-    if (
-      video.readyState >= 2 &&
-      !video.paused
-    ) {
-
-      console.log(
-        "カメラ映像再生確認"
-      );
-
-      closeStartupLoader();
-
-      return;
-    }
-
-
-    // これから再生される場合
-    video.addEventListener(
-      "playing",
-      () => {
-
-        console.log(
-          "カメラ映像再生開始"
-        );
-
-        closeStartupLoader();
-
-      },
-      { once: true }
-    );
-  };
-
-
-  waitForCameraVideo();
-
-
-  // ==============================================
   // MindAR起動成功
   // ==============================================
 
   scene.addEventListener("arReady", () => {
 
-    console.log(
-      "MindAR起動成功"
-    );
+    console.log("MindAR起動成功");
 
     status.textContent =
       "認識画像を探しています";
+
+    // カメラ画面への切り替え時間を少し確保してから
+    // ローディング画面を消す
+    setTimeout(() => {
+      closeStartupLoader();
+    }, 500);
 
   });
 
@@ -2464,25 +2390,6 @@ window.addEventListener("DOMContentLoaded", () => {
   );
 
 });
-
-
-
-
-
-
-    scene.addEventListener(
-      "arError",
-      (event) => {
-        console.error(
-          "MindAR起動失敗",
-          event
-        );
-
-        status.textContent =
-          "ARの起動に失敗しました";
-      }
-    );
-  });
 
 
 </script>
