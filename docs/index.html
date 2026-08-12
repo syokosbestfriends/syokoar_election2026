@@ -689,6 +689,46 @@ this.pa =
   document.querySelector("#pa-character");
 
 
+/* ==================================================
+   ローディング画面：キャラ紹介
+================================================== */
+
+.startup-profile {
+  margin-bottom: 14px;
+
+  color: #ffffff;
+
+  font-family:
+    "Hiragino Sans",
+    "Yu Gothic",
+    sans-serif;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  line-height: 1.55;
+  text-align: center;
+
+  letter-spacing: 0.03em;
+}
+
+
+/* 後半との間を少し空ける */
+.startup-profile-gap {
+  margin-top: 7px;
+}
+
+
+/* 最後だけ少し強調 */
+.startup-profile-highlight {
+  margin-top: 1px;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+
 // ==================================================
 // まばたき設定
 // ==================================================
@@ -2303,6 +2343,28 @@ if (
 ================================================== -->
 
 <div id="startup-loader">
+
+<div class="startup-profile">
+  <div>出身：福島</div>
+  <div>趣味：キノコ栽培</div>
+  <div>好きな音楽ジャンル：メタル</div>
+
+  <div class="startup-profile-gap">
+    普段はぼっちジメジメガールだが…
+  </div>
+
+  <div class="startup-profile-highlight">
+    ステージ上では圧倒的カリスマ！
+  </div>
+</div>
+
+<div class="startup-chibi">
+  <img
+    src="/syokoar_election2026/assets/ui/loading_mini.png"
+    alt=""
+  >
+</div>
+
 
   <div class="startup-chibi">
   <img
