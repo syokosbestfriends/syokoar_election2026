@@ -534,7 +534,6 @@ this.silhouetteReady = false;
       this.nextBlinkTime = 0;
       this.nextBlinkChangeTime = 0;
 
-      this.createParticles();
       this.createSilhouettePoints();
       this.createMycelium();
 
@@ -579,7 +578,7 @@ createSilhouettePoints: function () {
       centerY: 0.47,
       width: 0.90,
       height: 1.35,
-      count: 70
+      count: 130
     },
 
     {
@@ -589,7 +588,7 @@ createSilhouettePoints: function () {
       centerY: 0.54,
       width: 0.925,
       height: 1.386,
-      count: 70
+      count: 130
     },
 
     {
@@ -599,7 +598,7 @@ createSilhouettePoints: function () {
       centerY: 0.25,
       width: 0.925,
       height: 1.386,
-      count: 90
+      count: 160
     }
   ];
 
@@ -752,7 +751,7 @@ createSilhouettePoints: function () {
 
             z:
               0.07 +
-              Math.random() * 0.025
+              Math.random() * 0.01
           };
         });
 
@@ -764,15 +763,18 @@ createSilhouettePoints: function () {
       );
 
       if (
-        completed === targets.length
-      ) {
+  completed === targets.length
+) {
 
-        this.silhouetteReady = true;
+  this.silhouetteReady = true;
 
-        console.log(
-          "3人分シルエット座標生成完了"
-        );
-      }
+  console.log(
+    "3人分シルエット座標生成完了"
+  );
+
+  // シルエット座標が完成してから胞子生成
+  this.createParticles();
+}
     };
 
     if (
@@ -796,53 +798,213 @@ createSilhouettePoints: function () {
 
 
 
-    createParticles: function () {
-      const colors = [
-        "#ffffff",
-        "#eadcff",
-        "#d9ffe4",
-        "#ffd9ef"
-      ];
+// ==================================================
+// 軽量胞子生成
+// ==================================================
 
-      for (let i = 0; i < 48; i++) {
-        const particle = document.createElement("a-sphere");
+createParticles: function () {
 
-        const size = 0.007 + Math.random() * 0.014;
-        const color =
-          colors[Math.floor(Math.random() * colors.length)];
+  if (!this.silhouetteReady) {
+    console.warn(
+      "シルエット座標が未完成なので胞子生成を待機"
+    );
+    return;
+  }
 
-        particle.setAttribute("radius", size);
+  const totalCount = 420;
 
-        particle.setAttribute("segments-width", 8);
-        particle.setAttribute("segments-height", 6);
+  const positions =
+    new Float32Array(totalCount * 3);
 
-        particle.setAttribute("material", {
-          color,
-          emissive: color,
-          emissiveIntensity: 1.2,
-          transparent: true,
-          opacity: 0,
-          shader: "standard",
-          depthWrite: false
-        });
+  const startPositions =
+    new Float32Array(totalCount * 3);
 
-        particle.object3D.position.set(
-          (Math.random() - 0.5) * 1.5,
-          (Math.random() - 0.5) * 1.05,
-          0.07 + Math.random() * 0.09
-        );
+  const targetPositions =
+    new Float32Array(totalCount * 3);
 
-        particle.dataset.startX = particle.object3D.position.x;
-        particle.dataset.startY = particle.object3D.position.y;
-        particle.dataset.startZ = particle.object3D.position.z;
+  const phases =
+    new Float32Array(totalCount);
 
-        particle.dataset.speed = 0.7 + Math.random() * 0.8;
-        particle.dataset.phase = Math.random() * Math.PI * 2;
+  const allTargets = [
+    ...this.silhouettePoints.cu,
+    ...this.silhouettePoints.co,
+    ...this.silhouettePoints.pa
+  ];
 
-        this.el.appendChild(particle);
-        this.particles.push(particle);
-      }
-    },
+  for (let i = 0; i < totalCount; i++) {
+
+    const startX =
+      (Math.random() - 0.5) * 1.8;
+
+    const startY =
+      (Math.random() - 0.5) * 1.6;
+
+    const startZ =
+      0.06 + Math.random() * 0.18;
+
+    positions[i * 3] = startX;
+    positions[i * 3 + 1] = startY;
+    positions[i * 3 + 2] = startZ;
+
+    startPositions[i * 3] = startX;
+    startPositions[i * 3 + 1] = startY;
+    startPositions[i * 3 + 2] = startZ;
+
+    const target =
+      allTargets[i % allTargets.length];
+
+    targetPositions[i * 3] =
+      target.x;
+
+    targetPositions[i * 3 + 1] =
+      target.y;
+
+    targetPositions[i * 3 + 2] =
+      target.z;
+
+    phases[i] =
+      Math.random() * Math.PI * 2;
+  }
+
+  const geometry =
+    new THREE.BufferGeometry();
+
+  geometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+      positions,
+      3
+    )
+  );
+
+// ==================================================
+// 丸い胞子テクスチャを生成
+// ==================================================
+
+const particleCanvas =
+  document.createElement("canvas");
+
+particleCanvas.width = 64;
+particleCanvas.height = 64;
+
+const particleCtx =
+  particleCanvas.getContext("2d");
+
+// 背景を完全透明にする
+particleCtx.clearRect(
+  0,
+  0,
+  64,
+  64
+);
+
+// 中心が明るく、外周がぼんやり消える胞子
+const gradient =
+  particleCtx.createRadialGradient(
+    32, 32, 0,
+    32, 32, 30
+  );
+
+gradient.addColorStop(
+  0,
+  "rgba(255,255,255,1)"
+);
+
+gradient.addColorStop(
+  0.55,
+  "rgba(255,255,255,0.95)"
+);
+
+gradient.addColorStop(
+  0.80,
+  "rgba(255,255,255,0.45)"
+);
+
+gradient.addColorStop(
+  1,
+  "rgba(255,255,255,0)"
+);
+
+particleCtx.fillStyle =
+  gradient;
+
+particleCtx.fillRect(
+  0,
+  0,
+  64,
+  64
+);
+
+const particleTexture =
+  new THREE.CanvasTexture(
+    particleCanvas
+  );
+
+particleTexture.needsUpdate = true;
+
+
+  const material =
+  new THREE.PointsMaterial({
+
+    map: particleTexture,
+
+    color: 0xffffff,
+
+    size: 35,
+
+    transparent: true,
+
+    opacity: 1,
+
+    alphaTest: 0,
+
+    depthWrite: false,
+
+    blending:
+     THREE.NormalBlending,
+
+    sizeAttenuation: true
+
+  });
+
+  this.particleSystem =
+    new THREE.Points(
+      geometry,
+      material
+    );
+
+  this.el.object3D.add(
+    this.particleSystem
+  );
+
+  this.particleData = {
+    positions,
+    startPositions,
+    targetPositions,
+    phases,
+    totalCount
+  };
+
+  // すでに演出が始まっていたら、その場で胞子を表示
+if (this.animationStarted) {
+
+  this.particleSystem.visible = true;
+  this.particleSystem.material.opacity = 0;
+
+} else {
+
+  this.particleSystem.visible = false;
+
+}
+
+console.log(
+  "軽量胞子生成完了",
+  totalCount
+);
+
+},
+
+
 
     // ==================================================
     // 菌糸生成
@@ -1005,20 +1167,38 @@ this.pa.setAttribute(
     0
 );
 
-      this.particles.forEach((particle) => {
-        particle.setAttribute("visible", true);
-        particle.setAttribute(
-          "material",
-          "opacity",
-          0
-        );
+      if (this.particleSystem) {
 
-        particle.object3D.position.set(
-          Number(particle.dataset.startX),
-          Number(particle.dataset.startY),
-          Number(particle.dataset.startZ)
-        );
-      });
+  this.particleSystem.visible = true;
+
+  this.particleSystem.material.opacity = 0;
+
+  const pos =
+    this.particleData.positions;
+
+  const start =
+    this.particleData.startPositions;
+
+  for (
+    let i = 0;
+    i < this.particleData.totalCount;
+    i++
+  ) {
+
+    pos[i * 3] =
+      start[i * 3];
+
+    pos[i * 3 + 1] =
+      start[i * 3 + 1];
+
+    pos[i * 3 + 2] =
+      start[i * 3 + 2];
+  }
+
+  this.particleSystem.geometry
+    .attributes.position
+    .needsUpdate = true;
+}
 
       this.myceliumBranches.forEach((branch) => {
         branch.geometry.setDrawRange(0, 0);
@@ -1093,15 +1273,10 @@ this.characterGlow.setAttribute(
   0
 );
 
-      this.particles.forEach((particle) => {
-        particle.setAttribute("visible", false);
-
-        particle.object3D.position.set(
-          Number(particle.dataset.startX),
-          Number(particle.dataset.startY),
-          Number(particle.dataset.startZ)
-        );
-      });
+      if (this.particleSystem) {
+  this.particleSystem.visible = false;
+  this.particleSystem.material.opacity = 0;
+}
 
       this.myceliumBranches.forEach((branch) => {
         branch.geometry.setDrawRange(0, 0);
@@ -1303,76 +1478,162 @@ updateBlink: function (elapsed) {
       const elapsed =
         (time - this.animationStartTime) / 1000;
 
-      // ----------------------------------------------
-      // 0～1.35秒：胞子が中央へ集まる
-      // ----------------------------------------------
+// ----------------------------------------------
+// 0〜2.95秒：
+// 胞子集合 → シルエット保持 → 立ち絵と交代
+// ----------------------------------------------
 
-      const particleProgress =
-        Math.min(elapsed / 1.35, 1);
+if (
+  this.particleSystem &&
+  this.silhouetteReady
+) {
 
-      this.particles.forEach((particle) => {
-        const phase =
-          Number(particle.dataset.phase);
+  this.particleSystem.visible = true;
 
-        const speed =
-          Number(particle.dataset.speed);
+  const pos =
+    this.particleData.positions;
 
-        const startX =
-          Number(particle.dataset.startX);
+  const start =
+    this.particleData.startPositions;
 
-        const startY =
-          Number(particle.dataset.startY);
+  const target =
+    this.particleData.targetPositions;
 
-        const startZ =
-          Number(particle.dataset.startZ);
+  const phases =
+    this.particleData.phases;
 
-        const eased =
-          1 - Math.pow(
-            1 - particleProgress,
-            3
-          );
 
-        particle.object3D.position.x =
-          startX +
-          (0 - startX) * eased +
-          Math.sin(
-            elapsed * speed * 4 + phase
-          ) * 0.014;
+  // ==============================================
+  // ① 0〜1.45秒：シルエットへ集合
+  // ==============================================
 
-        particle.object3D.position.y =
-          startY +
-          (0.3 - startY) * eased +
-          Math.cos(
-            elapsed * speed * 3 + phase
-          ) * 0.014;
+  const gatherDuration = 1.45;
 
-        particle.object3D.position.z =
-          startZ +
-          (0.08 - startZ) * eased;
+  const gatherProgress =
+    Math.min(
+      elapsed / gatherDuration,
+      1
+    );
 
-        let opacity = 1;
+  const eased =
+    1 -
+    Math.pow(
+      1 - gatherProgress,
+      3
+    );
 
-        if (particleProgress < 0.2) {
-          opacity =
-            particleProgress / 0.2;
-        }
 
-        if (particleProgress > 0.72) {
-          opacity =
-            1 -
-            (particleProgress - 0.72) /
-            0.28;
-        }
+  for (
+    let i = 0;
+    i < this.particleData.totalCount;
+    i++
+  ) {
 
-        particle.setAttribute(
-          "material",
-          "opacity",
-          Math.max(
-            0,
-            Math.min(1, opacity)
-          )
-        );
-      });
+    const base = i * 3;
+
+    const phase =
+      phases[i];
+
+    // 集合途中だけ軽く漂わせる
+    const swirl =
+      (1 - eased) * 0.045;
+
+
+    pos[base] =
+      start[base] +
+      (
+        target[base] -
+        start[base]
+      ) * eased +
+      Math.sin(
+        elapsed * 4.2 + phase
+      ) * swirl;
+
+
+    pos[base + 1] =
+      start[base + 1] +
+      (
+        target[base + 1] -
+        start[base + 1]
+      ) * eased +
+      Math.cos(
+        elapsed * 3.8 + phase
+      ) * swirl;
+
+
+    pos[base + 2] =
+      start[base + 2] +
+      (
+        target[base + 2] -
+        start[base + 2]
+      ) * eased;
+  }
+
+
+  this.particleSystem.geometry
+    .attributes.position
+    .needsUpdate = true;
+
+
+  // ==============================================
+  // ② 最初だけふわっと出現
+  // ==============================================
+
+  if (elapsed < 0.18) {
+
+    this.particleSystem.material.opacity =
+      elapsed / 0.18;
+
+  }
+
+  // ==============================================
+  // ③ 1.45〜1.80秒：
+  // 完成したシルエットをそのまま見せる
+  // ==============================================
+
+  else if (elapsed < 1.80) {
+
+    this.particleSystem.material.opacity = 1;
+
+  }
+
+  // ==============================================
+  // ④ 1.80〜2.95秒：
+  // 立ち絵登場に合わせて胞子を消す
+  // ==============================================
+
+  else if (elapsed < 2.95) {
+
+    const fadeProgress =
+      Math.min(
+        (elapsed - 1.80) /
+        (2.95 - 1.80),
+        1
+      );
+
+    // 少し滑らかに減衰
+    const smoothFade =
+      fadeProgress *
+      fadeProgress *
+      (3 - 2 * fadeProgress);
+
+    this.particleSystem.material.opacity =
+      1 - smoothFade;
+
+  }
+
+  // ==============================================
+  // ⑤ 完全終了
+  // ==============================================
+
+  else {
+
+    this.particleSystem.material.opacity = 0;
+    this.particleSystem.visible = false;
+
+  }
+}
+
 
       // ----------------------------------------------
       // 0.32～1.4秒：菌糸成長
@@ -1458,112 +1719,59 @@ this.myceliumBranches.forEach((branch) => {
   branch.material.opacity = 0;
 });
 
+
+
 // ----------------------------------------------
-// 1.22～1.62秒：立ち絵自体が一瞬発光
+// 1.80秒以降：Cu登場
 // ----------------------------------------------
 
-if (elapsed >= 1.22 && elapsed <= 1.62) {
-  const glowProgress =
-    (elapsed - 1.22) / 0.4;
+if (elapsed >= 1.80) {
 
-  /*
-   * 最初に強く光り、その後すぐ弱くなる。
-   * 加算合成された同じ立ち絵を重ねているため、
-   * 人物の形に沿って明るく見える。
-   */
-  const glowOpacity =
-    Math.sin(glowProgress * Math.PI) * 0.9;
-
-  const glowScale =
-    0.72 +
+  const characterProgress =
     Math.min(
-      Math.max((elapsed - 1.22) / 0.72, 0),
+      (elapsed - 1.80) / 0.55,
       1
-    ) * 0.28;
-
-  this.characterGlow.setAttribute(
-    "scale",
-    `${glowScale * 1.015} ${glowScale * 1.015} ${glowScale * 1.015}`
-  );
-
-  this.characterGlow.setAttribute(
-    "material",
-    "opacity",
-    glowOpacity
-  );
-
-  this.characterGlow.object3D.position.y =
-    this.character.object3D.position.y;
-} else {
-  this.characterGlow.setAttribute(
-    "material",
-    "opacity",
-    0
-  );
-
-  if (elapsed > 1.62) {
-    this.characterGlow.setAttribute(
-      "visible",
-      false
     );
-  }
+
+  const eased =
+    1 -
+    Math.pow(
+      1 - characterProgress,
+      3
+    );
+
+  const scale =
+    0.72 + eased * 0.28;
+
+  this.character.setAttribute(
+    "scale",
+    `${scale} ${scale} ${scale}`
+  );
+
+  this.character.setAttribute(
+    "material",
+    "opacity",
+    eased
+  );
+
+  const cuStartY = 0.34;
+  const cuBaseY = 0.47;
+
+  this.character.object3D.position.y =
+    cuStartY +
+    (cuBaseY - cuStartY) * eased;
 }
-
-      // ----------------------------------------------
-      // 1.25秒以降：Cu登場
-      // ----------------------------------------------
-
-      if (elapsed >= 1.25) {
-        const characterProgress =
-          Math.min(
-            (elapsed - 1.25) / 0.72,
-            1
-          );
-
-        const eased =
-          1 -
-          Math.pow(
-            1 - characterProgress,
-            3
-          );
-
-        const scale =
-          0.72 + eased * 0.28;
-
-        this.character.setAttribute(
-          "scale",
-          `${scale} ${scale} ${scale}`
-        );
-
-        this.character.setAttribute(
-          "material",
-          "opacity",
-          eased
-        );
-
-        // 登場後は少しふわふわ動く
-const cuStartY = 0.34;
-const cuBaseY = 0.47;
-
-this.character.object3D.position.y =
-  cuStartY +
-  (cuBaseY - cuStartY) * eased;
-
-      }
 
 //----------------------------------
 // Co
 //----------------------------------
 
-if(elapsed>=1.60){
+if(elapsed>=2.10){
 
-    const p=Math.min(
-
-        (elapsed-1.60)/0.55,
-
-        1
-
-    );
+  const p=Math.min(
+    (elapsed-2.10)/0.55,
+    1
+  );
 
     const eased=
 
@@ -1597,15 +1805,12 @@ if(elapsed>=1.60){
 // Pa
 //----------------------------------
 
-if(elapsed>=1.95){
+if(elapsed>=2.40){
 
-    const p=Math.min(
-
-        (elapsed-1.95)/0.55,
-
-        1
-
-    );
+  const p=Math.min(
+    (elapsed-2.40)/0.55,
+    1
+  );
 
     const eased=
 
@@ -1825,7 +2030,7 @@ if (
 
   <a-scene
     mindar-image="
-      imageTargetSrc: ../assets/targets/target.mind;
+      imageTargetSrc: ./assets/targets/target.mind;
       autoStart: true;
       filterMinCF: 0.001;
       filterBeta: 0.01;
