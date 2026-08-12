@@ -878,14 +878,15 @@ createParticles: function () {
   );
 
   const material =
-    new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 0.022,
-      transparent: true,
-      opacity: 0,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
-    });
+  new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 9,
+    transparent: true,
+    opacity: 0,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    sizeAttenuation: true
+  });
 
   this.particleSystem =
     new THREE.Points(
@@ -1409,6 +1410,9 @@ if (
 
   this.particleSystem.visible = true;
 
+  // デバッグ用：胞子を強制的に見える状態にする
+  this.particleSystem.material.opacity = 1;
+
   const progress =
     Math.min(
       elapsed / 1.55,
@@ -1476,21 +1480,7 @@ if (
     .attributes.position
     .needsUpdate = true;
 
-  // 最初にふわっと出る
-  if (progress < 0.18) {
-
-    this.particleSystem.material.opacity =
-      progress / 0.18;
-
-  }
-
-  // シルエット形成中は明るく
-  else if (progress < 0.82) {
-
-    this.particleSystem.material.opacity =
-      0.95;
-
-  }
+  
 
   // 立ち絵へ渡すため最後に少し消える
   else {
