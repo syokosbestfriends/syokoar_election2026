@@ -1771,46 +1771,45 @@ if (elapsed >= 1.22 && elapsed <= 1.62) {
 }
 
       // ----------------------------------------------
-      // 1.25秒以降：Cu登場
-      // ----------------------------------------------
+// 1.80秒以降：Cu登場
+// ----------------------------------------------
 
-      if (elapsed >= 1.80) {
-        const characterProgress =
-          Math.min(
-            (elapsed - 1.80) / 0.55,
-            1
-          );
+if (elapsed >= 1.80) {
 
-        const eased =
-          1 -
-          Math.pow(
-            1 - characterProgress,
-            3
-          );
+  const characterProgress =
+    Math.min(
+      (elapsed - 1.80) / 0.55,
+      1
+    );
 
-        const scale =
-          0.72 + eased * 0.28;
+  const eased =
+    1 -
+    Math.pow(
+      1 - characterProgress,
+      3
+    );
 
-        this.character.setAttribute(
-          "scale",
-          `${scale} ${scale} ${scale}`
-        );
+  const scale =
+    0.72 + eased * 0.28;
 
-        this.character.setAttribute(
-          "material",
-          "opacity",
-          eased
-        );
+  this.character.setAttribute(
+    "scale",
+    `${scale} ${scale} ${scale}`
+  );
 
-        // 登場後は少しふわふわ動く
-const cuStartY = 0.34;
-const cuBaseY = 0.47;
+  this.character.setAttribute(
+    "material",
+    "opacity",
+    eased
+  );
 
-this.character.object3D.position.y =
-  cuStartY +
-  (cuBaseY - cuStartY) * eased;
+  const cuStartY = 0.34;
+  const cuBaseY = 0.47;
 
-      }
+  this.character.object3D.position.y =
+    cuStartY +
+    (cuBaseY - cuStartY) * eased;
+}
 
 //----------------------------------
 // Co
