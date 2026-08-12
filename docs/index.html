@@ -178,6 +178,26 @@ video {
 
       white-space: pre-line;
       text-align: center;
+
+      .status-main {
+  display: block;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  line-height: 1.5;
+}
+
+.status-sub {
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 14px;
+  font-weight: 400;
+
+  line-height: 1.5;
+}
     }
 
 
@@ -598,8 +618,18 @@ video {
 
 .startup-loader-text {
   color: #ffffff;
+
   text-align: center;
   letter-spacing: 0.05em;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    "Yu Gothic",
+    "YuGothic",
+    "Meiryo",
+    sans-serif;
 }
 
 
@@ -773,8 +803,10 @@ this.silhouetteReady = false;
         console.time("認識から演出開始");
 
         this.guide.classList.add("hidden");
-        this.status.textContent =
-        "召喚中…\n※読み込みが遅い場合はリロード！";
+        this.status.innerHTML = `
+         <span class="status-main">召喚中…</span>
+         <span class="status-sub">※読み込みが遅い場合はリロード！</span>
+        `;
 
         this.startSequence();
       });
